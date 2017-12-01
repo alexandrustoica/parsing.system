@@ -1,8 +1,8 @@
-from parsing.contextfreegrammer import ContextFreeGrammar
-from parsing.nonterminal import NonTerminal
-from parsing.rule import Rule
-from parsing.symbol import Symbol
-from parsing.terminal import Terminal
+from parsing.domain.context_free_grammar import ContextFreeGrammar
+from parsing.domain.non_terminal import NonTerminal
+from parsing.domain.rule import Rule
+from parsing.domain.symbol import Symbol
+from parsing.domain.terminal import Terminal
 
 
 def main():
@@ -12,7 +12,7 @@ def main():
     rules = [rule]
     start = NonTerminal("S")
     grammar = ContextFreeGrammar(non_terminals, alphabet, rules, start)
-    print(grammar)
+    print(grammar.extend())
 
 
 main()
