@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{245067e5-f1e2-4d83-8752-ae7e6d33099e}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile />
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>Global|PythonCore|3.6</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="parsing\domain\context_free_grammar.py" />
+    <Compile Include="parsing\domain\non_terminal.py" />
+    <Compile Include="parsing\domain\rule.py" />
+    <Compile Include="parsing\domain\symbol.py" />
+    <Compile Include="parsing\domain\symbol_type.py" />
+    <Compile Include="parsing\domain\terminal.py" />
+    <Compile Include="parsing\domain\__init__.py" />
+    <Compile Include="parsing\main.py" />
+    <Compile Include="parsing\parser\closure.py" />
+    <Compile Include="parsing\parser\item.py" />
+    <Compile Include="parsing\parser\position.py" />
+    <Compile Include="parsing\parser\__init__.py" />
+    <Compile Include="parsing\__init__.py" />
+    <Compile Include="test\test_closure.py" />
+    <Compile Include="test\__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="parsing" />
+    <Folder Include="parsing\domain" />
+    <Folder Include="parsing\parser" />
+    <Folder Include="test" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.6" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>
