@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{245067e5-f1e2-4d83-8752-ae7e6d33099e}</ProjectGuid>
     <ProjectHome />
-    <StartupFile />
+    <StartupFile>test\test_closure.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -22,6 +22,9 @@
     <Compile Include="parsing\domain\context_free_grammar.py" />
     <Compile Include="parsing\domain\non_terminal.py" />
     <Compile Include="parsing\domain\rule.py" />
+    <Compile Include="parsing\domain\state.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="parsing\domain\symbol.py" />
     <Compile Include="parsing\domain\symbol_type.py" />
     <Compile Include="parsing\domain\terminal.py" />

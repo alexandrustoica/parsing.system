@@ -24,3 +24,12 @@ class ParserItem:
     @staticmethod
     def item_for(rule):
         return ParserItem(rule.left, ParserPosition([], rule.right))
+        
+    def go_next(self):
+        return ParserItem(self._left, self._right.go_next())
+
+    def is_final(self):
+        return self._right.is_final()
+
+    def __str__(self):
+        return "{} -> {}".format(str(self._left), str(self._right))

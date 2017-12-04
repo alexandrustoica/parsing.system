@@ -1,4 +1,5 @@
 from unittest import TestCase
+from parsing.domain.state import State
 
 from parsing.domain.context_free_grammar import ContextFreeGrammar
 from parsing.domain.non_terminal import NonTerminal
@@ -10,16 +11,18 @@ from parsing.domain.terminal import Terminal
 
 class TestClosure(TestCase):
 
-    def test_is_generating_closure(self):
-        # declarations:
+    def setUp(self):
         non_terminals = [NonTerminal("S"), NonTerminal("A")]
         alphabet = [Terminal("a"), Terminal("b"), Terminal("c")]
         rules = [Rule(NonTerminal("S"), [Terminal("a"), NonTerminal("A")]),
                  Rule(NonTerminal("A"), [Terminal("b"), NonTerminal("A")]),
                  Rule(NonTerminal("A"), [Terminal("c")])]
         start = NonTerminal("S")
-        grammar = ContextFreeGrammar(non_terminals, alphabet, rules, start)
-        extended = grammar.extend()
+        self.grammar = ContextFreeGrammar(non_terminals, alphabet, rules, start)
+
+    def test_is_generating_closure(self):
+        # declarations:
+        extended = self.grammar.extend()
         item = ParserItem.item_for(extended.rules_of(NonTerminal("S'"))[0])
         # when:
         items = Closure(item, extended).closure
@@ -27,3 +30,26 @@ class TestClosure(TestCase):
         self.assertEqual(len(items), 2)
         self.assertEqual(items[0].left, NonTerminal("S'"))
         self.assertEqual(items[1].left, NonTerminal("S"))
+
+        print(self.grammar);
+
+    def test_is_going_to(self):
+        # declarations:
+        extended = self.grammar.extend()
+        item = ParserItem.item_for(extended.rules_of(NonTerminal("S'"))[0])
+        items = Closure(item, extended).closure
+        state = State(items, self.grammar)
+        # when
+        actual = state.go_to(Terminal("a"))
+        # then:
+        print(actual)
+        #self.assertEqual()
+
+        
+
+
+
+test = TestClosure()
+test.setUp()
+test.test_is_generating_closure()
+test.test_is_going_to()
