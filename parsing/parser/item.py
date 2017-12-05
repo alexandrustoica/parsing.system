@@ -24,7 +24,7 @@ class ParserItem:
     @staticmethod
     def item_for(rule):
         return ParserItem(rule.left, ParserPosition([], rule.right))
-        
+
     def go_next(self):
         return ParserItem(self._left, self._right.go_next())
 

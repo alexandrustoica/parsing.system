@@ -24,5 +24,5 @@ class ParserPosition:
         return self._left == []
 
     def __str__(self):
-
-        return "{}.{}".format("".join(map(lambda x: str(x), self.visited)),"".join(map(lambda x: str(x), self.left)))
+        return "{}.{}".format("".join(map(lambda x: str(x), self.visited)),
+                              "".join(map(lambda x: str(x), self.left)))

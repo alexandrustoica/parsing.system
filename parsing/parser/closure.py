@@ -11,16 +11,15 @@ class Closure:
         self._item = item
         self._grammar = grammar
 
-    @property
     def closure(self) -> List[ParserItem]:
-        result = []
+        result = [self._item]
         accumulator = [self._item]
         while accumulator:
-            result += accumulator
             for item in accumulator:
                 for rule in self._grammar.rules_of(item.next):
                     if ParserItem.item_for(rule) not in result:
                         accumulator.append(ParserItem.item_for(rule))
+                        result.append(ParserItem.item_for(rule))
                 accumulator.remove(item)
         return result
 
