@@ -25,6 +25,9 @@
     <Compile Include="parsing\domain\state.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="parsing\domain\state_machine.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="parsing\domain\symbol.py" />
     <Compile Include="parsing\domain\symbol_type.py" />
     <Compile Include="parsing\domain\terminal.py" />

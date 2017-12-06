@@ -16,10 +16,11 @@ class Closure:
         accumulator = [self._item]
         while accumulator:
             for item in accumulator:
-                for rule in self._grammar.rules_of(item.next):
-                    if ParserItem.item_for(rule) not in result:
-                        accumulator.append(ParserItem.item_for(rule))
-                        result.append(ParserItem.item_for(rule))
+                if item.has_next:
+                    for rule in self._grammar.rules_of(item.next):
+                        if ParserItem.item_for(rule) not in result:
+                            accumulator.append(ParserItem.item_for(rule))
+                            result.append(ParserItem.item_for(rule))
                 accumulator.remove(item)
         return result
 

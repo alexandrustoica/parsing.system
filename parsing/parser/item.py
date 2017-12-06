@@ -21,6 +21,10 @@ class ParserItem:
     def next(self) -> Symbol:
         return self._right.left[0]
 
+    @property
+    def has_next(self) -> bool:
+        return len(self._right.left) > 0
+
     @staticmethod
     def item_for(rule):
         return ParserItem(rule.left, ParserPosition([], rule.right))
@@ -33,3 +37,10 @@ class ParserItem:
 
     def __str__(self):
         return "{} -> {}".format(str(self._left), str(self._right))
+
+    def __eq__(self, ot):
+        return self.__str__() == str(ot)
+
+    def __hash__(self):
+        return self.__str__().__hash__()
+

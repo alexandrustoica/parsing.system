@@ -23,6 +23,18 @@ class State:
     def items(self) -> List[ParserItem]:
         return self._parse_items
 
+    @property
+    def is_valid(self):
+        return len(self._parse_items) > 0
+
     def __str__(self):
         return "\n".join(map(lambda x: str(x), self._parse_items))
 
+    def __eq__(self, ot):
+
+        self_set = set(self.items)
+        init_len = len(self_set)
+        return init_len == len(self_set.union(set(ot.items)))
+
+    def __hash__(self):
+        return self.__str__().__hash__()

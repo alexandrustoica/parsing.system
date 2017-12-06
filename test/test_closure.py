@@ -1,4 +1,5 @@
 from unittest import TestCase
+from parsing.domain.state_machine import StateMachine
 from parsing.domain.state import State
 
 from parsing.domain.context_free_grammar import ContextFreeGrammar
@@ -49,3 +50,16 @@ class TestClosure(TestCase):
         self.assertEqual(actual.items[0].left, NonTerminal("S"))
         self.assertEqual(actual.items[1].left, NonTerminal("A"))
         self.assertEqual(actual.items[2].left, NonTerminal("A"))
+
+    def test_state_machine(self):
+
+        extended = self.grammar.extend()
+        item = ParserItem.item_for(extended.rules_of(NonTerminal("S'"))[0])
+        items = Closure(item, extended).closure()
+        state = State(items, self.grammar)
+        machine = StateMachine(state)
+        pass
+
+test = TestClosure()
+test.setUp()
+test.test_state_machine()
