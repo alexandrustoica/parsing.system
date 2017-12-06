@@ -31,5 +31,16 @@ class ParserItem:
     def is_final(self):
         return self._right.is_final()
 
+    @staticmethod
+    def from_string(string: str):
+        result = string.replace(' ', '').split('->')
+        visited, left = result[1].split('.')
+        return ParserItem(NonTerminal(result[0]),
+                          ParserPosition([Symbol(x) for x in visited],
+                                         [Symbol(x) for x in left]))
+
+    def __eq__(self, other):
+        return self.right == other.right and self._left == other.left
+
     def __str__(self):
         return "{} -> {}".format(str(self._left), str(self._right))

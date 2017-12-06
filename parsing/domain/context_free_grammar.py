@@ -33,7 +33,15 @@ class ContextFreeGrammar:
                     "" + str(self._start))
 
     def extend(self):
-        return ContextFreeGrammar(self._non_terminals + [NonTerminal("S'")],
+        return ContextFreeGrammar(self._non_terminals + [NonTerminal("E")],
                                   self._alphabet,
-                                  self._rules + [Rule(NonTerminal("S'"), [self._start])],
-                                  NonTerminal("S'"))
+                                  self._rules + [Rule(NonTerminal("E"), [self._start])],
+                                  NonTerminal("E"))
+
+    @staticmethod
+    def from_dictionary(source: dict):
+        non_terminals = [NonTerminal(item) for item in source.get('non-terminals')]
+        terminals = [Terminal(item) for item in source.get('terminals')]
+        rules = [Rule.from_string(rule) for rule in source.get('rules')]
+        start = NonTerminal(source.get('start'))
+        return ContextFreeGrammar(non_terminals, terminals, rules, start)
