@@ -12,3 +12,8 @@ class Rule:
 
     def __str__(self) -> str:
         return "{} -> {}".format(str(self.left), "".join(str(symbol) for symbol in self.right))
+
+    @staticmethod
+    def from_string(string: str):
+        result = string.replace(' ', '').split('->')
+        return Rule(NonTerminal(result[0]), [Symbol(x) for x in result[1]])
