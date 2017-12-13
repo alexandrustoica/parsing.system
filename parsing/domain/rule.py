@@ -12,6 +12,9 @@ class Rule:
 
     def __str__(self) -> str:
         return "{} -> {}".format(str(self.left), "".join(str(symbol) for symbol in self.right))
+    
+    def __repr__(self):
+        return str(self)
 
     @staticmethod
     def from_string(string: str):

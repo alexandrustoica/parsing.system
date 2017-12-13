@@ -45,3 +45,17 @@ class TestClosure(TestCase):
                          [ParserItem.from_string('S -> a.A'),
                           ParserItem.from_string('A -> .bA'),
                           ParserItem.from_string('A -> .c')])
+
+    def test_state_machine(self):
+
+        extended = self.grammar.extend()
+        item = ParserItem.item_for(extended.rules_of(NonTerminal("E"))[0])
+        items = Closure(item, extended).closure()
+        state = State(items, self.grammar)
+        sm = StateMachine(state)
+
+a = TestClosure()
+a.setUp()
+a.test_is_generating_closure()
+a.test_is_going_to()
+a.test_state_machine()

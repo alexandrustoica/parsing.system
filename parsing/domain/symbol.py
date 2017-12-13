@@ -17,5 +17,11 @@ class Symbol:
     def __eq__(self, other):
         return other.value == self._value
 
+    def __repr__(self):
+        return str(self)
+
     def __str__(self):
         return self._value
+
+    def __hash__(self):
+        return self._value.__hash__()

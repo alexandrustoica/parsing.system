@@ -30,6 +30,9 @@ class State:
     def __str__(self):
         return "\n".join(map(lambda x: str(x), self._parse_items))
 
+    def __repr__(self):
+        return str(self)
+
     def __eq__(self, ot):
 
         self_set = set(self.items)
@@ -38,3 +41,6 @@ class State:
 
     def __hash__(self):
         return self.__str__().__hash__()
+
+    def is_final_state(self):
+        return 

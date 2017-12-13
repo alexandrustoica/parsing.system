@@ -10,3 +10,6 @@ class NonTerminal(Symbol):
     @property
     def type(self):
         return SymbolType.NON_TERMINAL
+
+    def __eq__(self, ot):
+        return self._value == ot._value

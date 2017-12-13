@@ -31,6 +31,9 @@ class ContextFreeGrammar:
                     "".join(str(terminal) + " " for terminal in self._alphabet),
                     "".join("\n\t{}".format(str(rule)) for rule in self._rules),
                     "" + str(self._start))
+    
+    def __repr__(self):
+        return str(self)
 
     def extend(self):
         return ContextFreeGrammar(self._non_terminals + [NonTerminal("E")],
