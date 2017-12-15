@@ -6,6 +6,12 @@ from typing import List
 from parsing.parser.item import ParserItem
 
 
+class IncompatibleStateToRuleException(RuntimeError):
+
+    def __init__(self):
+        RuntimeError.__init__(self, "State incompatible to any rule from grammar.")
+
+
 class State:
 
     def __init__(self, parse_items: List[ParserItem], grammar: ContextFreeGrammar):
@@ -50,3 +56,8 @@ class State:
 
     def is_final(self) -> bool:
         return self._represents_rule_from(self._grammar.extend().start_rules)
+
+    def to_rule(self) -> bool:
+        if not (self.is_last() or self.is_final()):
+            raise IncompatibleStateToRuleException()
+        return self._parse_items[0].to_rule()

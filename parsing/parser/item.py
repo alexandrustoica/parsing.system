@@ -64,3 +64,6 @@ class ParserItem:
     def __hash__(self):
         return self.__str__().__hash__()
 
+    def to_rule(self):
+        return Rule.from_string("{} -> {}".format(str(self._left), "".join([str(symbol) for symbol in self._right.all_symbols])))
+

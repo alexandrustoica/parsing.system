@@ -1,8 +1,10 @@
 from unittest import TestCase
 
+from parsing.action.action_table import ActionTable
+from parsing.action.action_type import ActionType
 from parsing.domain.rule import Rule
 from parsing.domain.state_finite_automaton import StateFiniteAutomaton
-from parsing.domain.state import State
+from parsing.domain.state import State, IncompatibleStateToRuleException
 
 from parsing.domain.context_free_grammar import ContextFreeGrammar
 from parsing.domain.non_terminal import NonTerminal
@@ -86,3 +88,24 @@ class TestClosure(TestCase):
         non_final_state = transitions[1].destination
         # when/then:
         self.assertTrue(final_state.is_final() and not non_final_state.is_final())
+
+    def test_when_state_converted_to_rule_and_state_represents_rule_expect_rule(self):
+        # give:
+        final_state = StateFiniteAutomaton(self.grammar).transitions[0].destination
+        # when/then:
+        self.assertEqual(final_state.to_rule(), Rule.from_string("E -> S"))
+
+    def test_when_state_converted_to_rule_and_state_not_represents_rule_expect_exception(self):
+        # give:
+        state = StateFiniteAutomaton(self.grammar).transitions[1].destination
+        # when/then:
+        self.assertRaises(IncompatibleStateToRuleException, state.to_rule)
+
+    def test_when_building_action_table_from_grammar_expect_valid_action_table(self):
+        # given:
+        state_finite_automaton = StateFiniteAutomaton(self.grammar)
+        # when:
+        action_table = ActionTable(state_finite_automaton)
+        # print(action_table) -- too hard to assert
+        # then:
+        self.assertTrue(len(action_table.actions), len(state_finite_automaton.states))

@@ -16,6 +16,9 @@ class Rule:
     def __repr__(self):
         return str(self)
 
+    def __eq__(self, other):
+        return self.left == other.left and self.right == other.right
+
     @staticmethod
     def from_string(string: str):
         result = string.replace(' ', '').split('->')

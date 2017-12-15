@@ -14,6 +14,10 @@ class ParserPosition:
         return self._visited
 
     @property
+    def all_symbols(self) -> List[Symbol]:
+        return self._visited + self._left
+
+    @property
     def left(self) -> List[Symbol]:
         return self._left
 

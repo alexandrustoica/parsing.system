@@ -2,7 +2,7 @@ from parsing.domain.state import State
 from parsing.domain.symbol import Symbol
 
 
-class StateTableElement:
+class StateTransition:
 
     def __init__(self, source: State, destination: State, symbol: Symbol):
         self.source = source

@@ -7,9 +7,8 @@ class ActionType(Enum):
     ACCEPT = 1
     RETURN = 2
 
-    def __init__(self, value):
-        self._value = value
-
-    @property
-    def value(self) -> int:
-        return self._value
+    @classmethod
+    def action_for_state(cls, state):
+        return ActionType.ACCEPT if state.is_final() \
+            else ActionType.RETURN if state.is_last() \
+            else ActionType.MOVEMENT
