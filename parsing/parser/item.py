@@ -48,7 +48,9 @@ class ParserItem:
         return self.right == other.right and self._left == other.left
 
     def equals_rule(self, rule: Rule) -> bool:
-        return self.left == rule.left and self.right.equals_symbols(rule.right)
+        return self.left == rule.left \
+               and self.right.equals_symbols(rule.right) \
+               and self.right.is_final()
 
     def __str__(self):
         return "{} -> {}".format(str(self._left), str(self._right))
@@ -56,9 +58,8 @@ class ParserItem:
     def __repr__(self):
         return str(self)
 
-    def __eq__(self, ot):
-
-        return type(self) == type(ot) and self._left == ot._left and self._right == ot._right;
+    def __eq__(self, other):
+        return type(self) == type(other) and self._left == other._left and self._right == other._right;
 
     def __hash__(self):
         return self.__str__().__hash__()

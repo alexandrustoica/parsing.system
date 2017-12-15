@@ -31,7 +31,7 @@ class ContextFreeGrammar:
                     "".join(str(terminal) + " " for terminal in self._alphabet),
                     "".join("\n\t{}".format(str(rule)) for rule in self._rules),
                     "" + str(self._start))
-    
+
     def __repr__(self):
         return str(self)
 
@@ -40,6 +40,10 @@ class ContextFreeGrammar:
                                   self._alphabet,
                                   self._rules + [Rule(NonTerminal("E"), [self._start])],
                                   NonTerminal("E"))
+
+    @property
+    def start_rules(self) -> List[Rule]:
+        return [rule for rule in self.rules if rule.left == self._start]
 
     @staticmethod
     def from_dictionary(source: dict):
