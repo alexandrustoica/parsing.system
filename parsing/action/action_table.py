@@ -5,7 +5,6 @@ from parsing.action.action_type import ActionType
 from parsing.action.destination_state import DestinationState
 from parsing.domain.state import State
 from parsing.domain.state_finite_automaton import StateFiniteAutomaton
-from parsing.domain.state_transition import StateTransition
 
 
 class ActionTable:
@@ -30,5 +29,5 @@ class ActionTable:
         return "\n".join([str(action) for action in self.__actions])
 
     @property
-    def actions(self):
+    def actions(self) -> List[Action]:
         return self.__actions
