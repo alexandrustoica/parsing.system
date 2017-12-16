@@ -13,6 +13,11 @@ class ParserAtom:
         self.__symbols = symbols
         self.__success_route = success_route
 
+    def move(self, index: int):
+        return ParserAtom(self.route + [ParserIndexElement(index, self.first_symbol)],
+                          self.symbols[-1:],
+                          self.success_route)
+
     @property
     def route(self):
         return self.__route
@@ -28,3 +33,7 @@ class ParserAtom:
     @property
     def current(self) -> ParserIndexElement:
         return self.__route[-1]
+
+    @property
+    def first_symbol(self) -> Symbol:
+        return self.symbols[0]

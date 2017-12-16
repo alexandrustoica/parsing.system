@@ -22,3 +22,7 @@ class Action:
     @property
     def action_type(self) -> ActionType:
         return self._action_type
+
+    @property
+    def source(self) -> State:
+        return self._source_state
