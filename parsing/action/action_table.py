@@ -16,9 +16,9 @@ class ActionTable:
     def __build(self, states: List[State], accumulator: List) -> List[Action]:
         if len(states) == 0:
             return accumulator
-        return self.__build(states[1:], accumulator + [self.__get_actions_for_state(states[0])])
+        return self.__build(states[1:], accumulator + [self.__get_action_for_state(states[0])])
 
-    def __get_actions_for_state(self, state: State) -> List[Action]:
+    def __get_action_for_state(self, state: State) -> Action:
         return Action(state, ActionType.action_for_state(state), self.__get_destinations_for_state(state))
 
     def __get_destinations_for_state(self, state: State) -> List[DestinationState]:

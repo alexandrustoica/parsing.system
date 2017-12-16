@@ -106,6 +106,6 @@ class TestClosure(TestCase):
         state_finite_automaton = StateFiniteAutomaton(self.grammar)
         # when:
         action_table = ActionTable(state_finite_automaton)
-        # print(action_table) -- too hard to assert
+        print(action_table)
         # then:
         self.assertTrue(len(action_table.actions), len(state_finite_automaton.states))
