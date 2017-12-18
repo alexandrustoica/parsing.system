@@ -109,3 +109,11 @@ class TestClosure(TestCase):
         print(action_table)
         # then:
         self.assertTrue(len(action_table.actions), len(state_finite_automaton.states))
+
+if __name__ == "__main__":
+    test = TestClosure()
+
+    test.setUp()
+    test.test_is_generating_closure()
+    test.test_is_going_to()
+    test.test_state_machine()

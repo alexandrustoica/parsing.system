@@ -1,4 +1,5 @@
 from typing import List
+from parsing.domain.symbol import Symbol
 
 from parsing.action.action_type import ActionType
 from parsing.action.destination_state import DestinationState
@@ -26,3 +27,7 @@ class Action:
     @property
     def source(self) -> State:
         return self._source_state
+
+    def get_index_from_sym(self, sym: Symbol):
+        # TODO
+        pass
