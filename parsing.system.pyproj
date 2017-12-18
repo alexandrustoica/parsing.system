@@ -19,15 +19,23 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="parsing\action\action.py" />
+    <Compile Include="parsing\action\action_table.py" />
+    <Compile Include="parsing\action\action_type.py" />
+    <Compile Include="parsing\action\destination_state.py" />
+    <Compile Include="parsing\action\__init__.py" />
+    <Compile Include="parsing\analyzer\analyzer.py" />
+    <Compile Include="parsing\analyzer\parser_atom.py" />
+    <Compile Include="parsing\analyzer\parser_index_element.py" />
+    <Compile Include="parsing\analyzer\__init__.py" />
     <Compile Include="parsing\domain\context_free_grammar.py" />
     <Compile Include="parsing\domain\non_terminal.py" />
     <Compile Include="parsing\domain\rule.py" />
     <Compile Include="parsing\domain\state.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="parsing\domain\state_machine.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="parsing\domain\state_finite_automaton.py" />
+    <Compile Include="parsing\domain\state_transition.py" />
     <Compile Include="parsing\domain\symbol.py" />
     <Compile Include="parsing\domain\symbol_type.py" />
     <Compile Include="parsing\domain\terminal.py" />
@@ -43,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="parsing" />
+    <Folder Include="parsing\action\" />
+    <Folder Include="parsing\analyzer\" />
     <Folder Include="parsing\domain" />
     <Folder Include="parsing\parser" />
     <Folder Include="test" />
