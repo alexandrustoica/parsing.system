@@ -1,15 +1,11 @@
-from symtable import Symbol
 from functools import reduce
+from symtable import Symbol
+from typing import List
+
 from parsing.domain.context_free_grammar import ContextFreeGrammar
 from parsing.parser.closure import Closure
-from typing import List
 from parsing.parser.item import ParserItem
-
-
-class IncompatibleStateToRuleException(RuntimeError):
-
-    def __init__(self):
-        RuntimeError.__init__(self, "State incompatible to any rule from grammar.")
+from parsing.state.incompatible_state_to_rule import IncompatibleStateToRuleException
 
 
 class State:

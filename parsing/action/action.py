@@ -1,9 +1,8 @@
 from typing import List
-from parsing.domain.symbol import Symbol
 
 from parsing.action.action_type import ActionType
-from parsing.action.destination_state import DestinationState
-from parsing.domain.state import State
+from parsing.state.destination_state import DestinationState
+from parsing.state.state import State
 
 
 class Action:
@@ -17,7 +16,7 @@ class Action:
 
     def __str__(self):
         return "{} type: {} destinations: {}"\
-            .format(str(self._source_state), str(self._action_type),
+            .format(repr(self._source_state), str(self._action_type),
                     ", ".join([str(destination) for destination in self._destination_states]))
 
     @property
@@ -28,6 +27,10 @@ class Action:
     def source(self) -> State:
         return self._source_state
 
-    def get_index_from_sym(self, sym: Symbol):
-        # TODO
-        pass
+    @property
+    def destinations(self) -> List[DestinationState]:
+        return self._destination_states
+
+    @property
+    def get_state_based_on_symbol(self, symbol) -> State:
+        return next(filter(lambda destination: destination.symbol == symbol, self.destinations), None)

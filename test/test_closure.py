@@ -1,16 +1,17 @@
 from unittest import TestCase
 
-from parsing.action.action_table import ActionTable
-from parsing.action.action_type import ActionType
-from parsing.domain.rule import Rule
-from parsing.domain.state_finite_automaton import StateFiniteAutomaton
-from parsing.domain.state import State, IncompatibleStateToRuleException
 
+from parsing.action.action_table import ActionTable
+from parsing.analyzer.analyzer import Analyzer
 from parsing.domain.context_free_grammar import ContextFreeGrammar
 from parsing.domain.non_terminal import NonTerminal
+from parsing.domain.rule import Rule
 from parsing.domain.symbol import Symbol
 from parsing.parser.closure import Closure
 from parsing.parser.item import ParserItem
+from parsing.state.incompatible_state_to_rule import IncompatibleStateToRuleException
+from parsing.state.state import State
+from parsing.state.state_finite_automaton import StateFiniteAutomaton
 
 
 class TestClosure(TestCase):
@@ -109,6 +110,38 @@ class TestClosure(TestCase):
         print(action_table)
         # then:
         self.assertTrue(len(action_table.actions), len(state_finite_automaton.states))
+
+    def test_when_getting_next_state_from_parser_step_expect_next_state(self):
+        # given:
+        action_table = ActionTable(StateFiniteAutomaton(self.grammar))
+        analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        # when:
+        next_state = analyzer.next_state
+        # then:
+        self.assertEqual(next_state.items,
+                         [ParserItem.from_string('S -> a.A'),
+                          ParserItem.from_string('A -> .bA'),
+                          ParserItem.from_string('A -> .c')])
+
+    def test_when_getting_action_for_next_state_expect_right_action(self):
+        # given:
+        action_table = ActionTable(StateFiniteAutomaton(self.grammar))
+        analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        # when:
+        action = analyzer.next_action()
+        # then:
+        self.assertEqual(action.source, analyzer.next_state)
+
+    def test_when_shifting_analyzer_step_expect_valid_next_parser_step(self):
+        # given:
+        action_table = ActionTable(StateFiniteAutomaton(self.grammar))
+        analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        # when:
+        next_parser_step = analyzer.shift().shift().parser_step
+        print(next_parser_step)
+        # then:
+        self.assertEqual(1,1)
+
 
 if __name__ == "__main__":
     test = TestClosure()

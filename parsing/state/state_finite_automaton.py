@@ -1,11 +1,12 @@
 from typing import List
 
+
 from parsing.domain.context_free_grammar import ContextFreeGrammar
 from parsing.domain.non_terminal import NonTerminal
-from parsing.domain.state import State
-from parsing.domain.state_transition import StateTransition
 from parsing.parser.closure import Closure
 from parsing.parser.item import ParserItem
+from parsing.state.state import State
+from parsing.state.state_transition import StateTransition
 
 
 class StateFiniteAutomaton:

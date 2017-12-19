@@ -1,5 +1,5 @@
-from parsing.domain.state import State
 from parsing.domain.symbol import Symbol
+from parsing.state.state import State
 
 
 class StateTransition:
