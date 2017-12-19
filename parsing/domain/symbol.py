@@ -20,6 +20,10 @@ class Symbol:
     def from_string(cls, string: str) -> List:
         return [Symbol(value) for value in string]
 
+    @classmethod
+    def from_complex_string(cls, string: str) -> List:
+        return [Symbol(value) for value in string.split(' ')]
+
     def __eq__(self, other):
         return other.value == self._value
 

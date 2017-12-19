@@ -9,7 +9,7 @@ from parsing.domain.non_terminal import NonTerminal
 from parsing.domain.rule import Rule
 from parsing.domain.symbol import Symbol
 from parsing.parser.closure import Closure
-from parsing.parser.item import ParserItem
+from parsing.parser.parser_item import ParserItem
 from parsing.state.incompatible_state_to_rule import IncompatibleStateToRuleException
 from parsing.state.state import State
 from parsing.state.state_conflict import StateConflict
@@ -34,8 +34,8 @@ class TestAnalyzer(TestCase):
         # when:
         items = Closure(item, extended).closure()
         # then:
-        self.assertEqual(items, [ParserItem.from_string('E -> .S'),
-                                 ParserItem.from_string('S -> .aA')])
+        self.assertEqual(items, [ParserItem.from_string('E -> . S'),
+                                 ParserItem.from_string('S -> . a A')])
 
     def test_when_is_going_to_next_state_expect_valid_next_state(self):
         # declarations:
@@ -47,9 +47,9 @@ class TestAnalyzer(TestCase):
         actual = state.go_to(Symbol("a"))
         # then:
         self.assertEqual(actual.items,
-                         [ParserItem.from_string('S -> a.A'),
-                          ParserItem.from_string('A -> .bA'),
-                          ParserItem.from_string('A -> .c')])
+                         [ParserItem.from_string('S -> a . A'),
+                          ParserItem.from_string('A -> . b A'),
+                          ParserItem.from_string('A -> . c')])
 
     def test_when_generating_state_finite_automaton_expect_valid_transitions(self):
         # when:
@@ -59,7 +59,7 @@ class TestAnalyzer(TestCase):
         self.assertEqual((transitions[0].source.items,
                           transitions[0].destination.items,
                           transitions[0].symbol),
-                         ([ParserItem.from_string('E -> .S'),
+                         ([ParserItem.from_string('E -> . S'),
                            ParserItem.from_string('S -> .aA')],
                           [ParserItem.from_string('E -> S.')],
                           NonTerminal("S")))
@@ -74,7 +74,7 @@ class TestAnalyzer(TestCase):
         # give:
         item = ParserItem.from_string("E -> S.")
         # when/then:
-        self.assertFalse(item.equals_rule(Rule.from_string("S -> aA")))
+        self.assertFalse(item.equals_rule(Rule.from_string("S -> a A")))
 
     def test_when_state_is_last_and_represents_rule_expect_true(self):
         # give:
@@ -168,6 +168,23 @@ class TestAnalyzer(TestCase):
         # given:
         action_table = ActionTable(StateFiniteAutomaton(self.grammar))
         analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        # when:
+        actual = analyzer.analyze()
+        # print(actual)
+        # then:
+        self.assertTrue(actual)
+
+    def test_when_complex_grammar_example_expect_analyzer_to_work(self):
+        # given:
+        data = {
+            'terminals': ['ana', 'banana', 'cot'],
+            'non-terminals': ['start', 'next'],
+            'rules': ['start -> ana next', 'next -> banana next', 'next -> cot'],
+            'start': 'start'
+        }
+        grammar = ContextFreeGrammar.from_complex_dictionary(data)
+        action_table = ActionTable(StateFiniteAutomaton(grammar))
+        analyzer = Analyzer(action_table, Symbol.from_complex_string("ana banana banana banana cot"))
         # when:
         actual = analyzer.analyze()
         # then:

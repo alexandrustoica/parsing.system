@@ -23,3 +23,12 @@ class Rule:
     def from_string(string: str):
         result = string.replace(' ', '').split('->')
         return Rule(NonTerminal(result[0]), [Symbol(x) for x in result[1]])
+
+    @staticmethod
+    def from_complex_string(string: str):
+        result = string.split(' -> ')
+        return Rule(NonTerminal(result[0].replace(' ', '')), [Symbol(x) for x in result[1].split(' ')])
+
+    @staticmethod
+    def from_parser_item(parser_item):
+        return Rule(parser_item.left, parser_item.right.all_symbols)

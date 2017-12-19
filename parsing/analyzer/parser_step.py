@@ -14,6 +14,10 @@ class ParserStep:
         self.__input_stream = input_stream
         self.__output_stream = output_stream
 
+    @property
+    def output_stream(self):
+        return self.__output_stream
+
     def shift(self, state: DestinationState):
         return ParserStep(self.__stack + [state],
                           self.__input_stream[1:],

@@ -4,7 +4,7 @@ from typing import List
 from parsing.domain.context_free_grammar import ContextFreeGrammar
 from parsing.domain.non_terminal import NonTerminal
 from parsing.parser.closure import Closure
-from parsing.parser.item import ParserItem
+from parsing.parser.parser_item import ParserItem
 from parsing.state.state import State
 from parsing.state.state_transition import StateTransition
 

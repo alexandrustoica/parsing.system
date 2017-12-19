@@ -1,4 +1,4 @@
-from parsing.parser.position import ParserPosition
+from parsing.parser.parser_position import ParserPosition
 from parsing.domain.rule import Rule
 from parsing.domain.non_terminal import NonTerminal
 from parsing.domain.symbol import Symbol
@@ -65,5 +65,5 @@ class ParserItem:
         return self.__str__().__hash__()
 
     def to_rule(self):
-        return Rule.from_string("{} -> {}".format(str(self._left), "".join([str(symbol) for symbol in self._right.all_symbols])))
+        return Rule.from_parser_item(self)
 

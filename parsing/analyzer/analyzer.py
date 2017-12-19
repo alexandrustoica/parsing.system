@@ -23,7 +23,7 @@ class Analyzer:
         return self.__parser_step
 
     def analyze(self) -> bool:
-        return True if self.is_accepted \
+        return self.__parser_step.output_stream if self.is_accepted \
             else self.shift().analyze() if self.is_shifting \
             else self.reduce().analyze() if self.is_reducing else False
 

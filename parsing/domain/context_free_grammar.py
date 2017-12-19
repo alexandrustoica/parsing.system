@@ -46,9 +46,17 @@ class ContextFreeGrammar:
         return [rule for rule in self.rules if rule.left == self._start]
 
     @staticmethod
-    def from_dictionary(source: dict):
+    def __from_dictionary(source: dict, rule_extractor):
         non_terminals = [NonTerminal(item) for item in source.get('non-terminals')]
         terminals = [Terminal(item) for item in source.get('terminals')]
-        rules = [Rule.from_string(rule) for rule in source.get('rules')]
+        rules = [rule_extractor(rule) for rule in source.get('rules')]
         start = NonTerminal(source.get('start'))
         return ContextFreeGrammar(non_terminals, terminals, rules, start)
+
+    @staticmethod
+    def from_dictionary(source: dict):
+        return ContextFreeGrammar.__from_dictionary(source, Rule.from_string)
+
+    @staticmethod
+    def from_complex_dictionary(source: dict):
+        return ContextFreeGrammar.__from_dictionary(source, Rule.from_complex_string)
