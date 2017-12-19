@@ -13,6 +13,7 @@ class Analyzer:
         self.__action_table = action_table
         self.__parser_step = parser_step if parser_step is not None \
             else self.__build_initial_parser_step(input_stream)
+        print(self.__parser_step)
 
     @property
     def action_table(self) -> ActionTable:
@@ -51,6 +52,7 @@ class Analyzer:
 
     @property
     def next_state(self) -> DestinationState:
+        print(self.__parser_step.current_state, self.__parser_step.current_symbol)
         return self.__action_table.next_state(self.__parser_step.current_state, self.__parser_step.current_symbol)
 
     @property

@@ -1,6 +1,5 @@
 from unittest import TestCase
 
-
 from parsing.action.action_table import ActionTable
 from parsing.analyzer.analyzer import Analyzer
 from parsing.analyzer.analyzer_conflict import AnalyzerConflict
@@ -177,18 +176,73 @@ class TestAnalyzer(TestCase):
     def test_when_complex_grammar_example_expect_analyzer_to_work(self):
         # given:
         data = {
-            'terminals': ['ana', 'banana', 'cot'],
-            'non-terminals': ['start', 'next'],
-            'rules': ['start -> ana next', 'next -> banana next', 'next -> cot'],
-            'start': 'start'
+            'terminals': ['program', 'block', 'declarations', 'statements', 'declaration', 'type', 'identifier',
+                          'expression', 'constant', 'statement', 'assignment', 'control_statement', 'io_statement',
+                          'conditional_statement', 'loop_statement', 'condition', 'relation', 'sign_atom',
+                          'operation', 'atom', 'low_level_operation', 'high_level_operation', 'range'],
+            'non-terminals': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16',
+                              '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28'],
+            'rules': [
+                "program -> block",
+                "block -> declarations",
+                "block -> statements"
+                "declarations -> declarations",
+                "declarations -> declaration",
+                # "declaration -> type identifier 4 expression 5",
+                "declaration -> type identifier 5",
+                "type -> 2",
+                "type -> 3",
+                "identifier -> 0",
+                "constant -> 1",
+                "constant -> 27 1 27",
+                "statements -> ",
+                "statements -> statement statements",
+                "statement -> assignment",
+                "statement -> control_statement",
+                "statement -> io_statement",
+                "assignment -> identifier 4 expression 5",
+                "io_statement -> 6 10 11 5",
+                "io_statement -> 7 10 identifier 11 5",
+                "control_statement -> conditional_statement",
+                "control_statement -> loop_statement",
+                "conditional_statement -> 8 10 expression 11 12 block 13",
+                # "conditional_statement -> conditional_statement 12 9 8 10 condition 11 12 block 13 13",
+                # "conditional_statement -> conditional_statement 12 9 12 block 13 13",
+                # "condition -> expression",
+                # "condition -> expression relation expression",
+                "expression -> sign_atom",
+                "expression -> 10 expression 11",
+                "expression -> expression operation atom",
+                "sign_atom -> atom",
+                "sign_atom -> 15 atom",
+                "operation -> low_level_operation",
+                "operation -> high_level_operation",
+                "low_level_operation -> 14",
+                "low_level_operation -> 15",
+                "high_level_operation -> 16",
+                "high_level_operation -> 17",
+                "high_level_operation -> relation",
+                "atom -> identifier",
+                "atom -> constant",
+                "relation -> 22",
+                "relation -> 23",
+                "relation -> 21",
+                "relation -> 20",
+                "relation -> 19",
+                "relation -> 18",
+                "loop_statement -> 24 10 type identifier 26 range 11 12 block 13",
+                "range -> identifier",
+                "range -> 25 10 constant 26 constant 11"],
+            'start': 'program'
         }
         grammar = ContextFreeGrammar.from_complex_dictionary(data)
         action_table = ActionTable(StateFiniteAutomaton(grammar))
-        analyzer = Analyzer(action_table, Symbol.from_complex_string("ana banana banana banana cot"))
+        analyzer = Analyzer(action_table, Symbol.from_complex_string("2 0 5"))
+        # [print(x) for x in StateFiniteAutomaton(grammar).transitions]
         # when:
         actual = analyzer.analyze()
         # then:
-        self.assertTrue(actual)
+        # self.assertTrue(actual)
 
     def test_when_given_wrong_expression_expect_analyzer_raises_exception(self):
         # given:
@@ -208,6 +262,24 @@ class TestAnalyzer(TestCase):
         grammar = ContextFreeGrammar.from_dictionary(data)
         # when/then:
         self.assertRaises(StateConflict, StateFiniteAutomaton, grammar)
+
+    def test_when_grammar_has_empty_rule_expect_to_accept_input_stream(self):
+        # given:
+        data = {
+            'terminals': ['1', '2'],
+            'non-terminals': ['S'],
+            'rules': ['S -> ', 'S -> 1 S'],
+            'start': 'S'
+        }
+        grammar = ContextFreeGrammar.from_complex_dictionary(data)
+        # when/then:
+        action_table = ActionTable(StateFiniteAutomaton(grammar))
+        [print(x) for x in StateFiniteAutomaton(grammar).transitions]
+        analyzer = Analyzer(action_table, Symbol.from_complex_string("1 1"))
+        # when:
+        actual = analyzer.analyze()
+        # then:
+        self.assertTrue(actual)
 
     def test_when_state_in_shift_reduce_conflict_expect_state_conflict(self):
         # given:

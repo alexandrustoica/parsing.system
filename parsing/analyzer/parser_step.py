@@ -51,7 +51,7 @@ class ParserStep:
 
     @property
     def current_symbol(self):
-        return self.__input_stream[0]
+        return Symbol('ε') if not len(self.__input_stream) else self.__input_stream[0]
 
     def __str__(self):
         return "[{}, {}$, {}]".format(''.join(str(element) for element in self.__stack),
