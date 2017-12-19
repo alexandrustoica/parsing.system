@@ -17,7 +17,7 @@ class ActionTable:
     def actions(self) -> List[Action]:
         return self.__actions
 
-    def next_state(self, current_state: State, symbol: Symbol):
+    def next_state(self, current_state: State, symbol: Symbol) -> DestinationState:
         return next(filter(lambda destination: destination.symbol == symbol,
                            next(filter(lambda action: action.source == current_state,
                                        self.actions), None).destinations), None)

@@ -13,4 +13,7 @@ class DestinationState(State):
         return self.__symbol
 
     def __str__(self):
-        return "({}, {})".format(self.__symbol, repr(self))
+        return "({}, {})".format(self.__symbol, ', '.join(str(item) for item in  self.items))
+
+    def __repr__(self):
+        return str(self)

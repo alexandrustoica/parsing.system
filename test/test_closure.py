@@ -14,7 +14,7 @@ from parsing.state.state import State
 from parsing.state.state_finite_automaton import StateFiniteAutomaton
 
 
-class TestClosure(TestCase):
+class TestAnalyzer(TestCase):
 
     def setUp(self):
         grammar = {
@@ -25,7 +25,7 @@ class TestClosure(TestCase):
         }
         self.grammar = ContextFreeGrammar.from_dictionary(grammar)
 
-    def test_is_generating_closure(self):
+    def test_when_generating_closure_expect_valid_items(self):
         # declarations:
         extended = self.grammar.extend()
         item = ParserItem.item_for(extended.rules_of(NonTerminal("E"))[0])
@@ -35,7 +35,7 @@ class TestClosure(TestCase):
         self.assertEqual(items, [ParserItem.from_string('E -> .S'),
                                  ParserItem.from_string('S -> .aA')])
 
-    def test_is_going_to(self):
+    def test_when_is_going_to_next_state_expect_valid_next_state(self):
         # declarations:
         extended = self.grammar.extend()
         item = ParserItem.item_for(extended.rules_of(NonTerminal("E"))[0])
@@ -49,7 +49,7 @@ class TestClosure(TestCase):
                           ParserItem.from_string('A -> .bA'),
                           ParserItem.from_string('A -> .c')])
 
-    def test_state_machine(self):
+    def test_when_generating_state_finite_automaton_expect_valid_transitions(self):
         # when:
         transitions = StateFiniteAutomaton(self.grammar).transitions
         # then:
@@ -132,21 +132,33 @@ class TestClosure(TestCase):
         # then:
         self.assertEqual(action.source, analyzer.next_state)
 
-    def test_when_shifting_analyzer_step_expect_valid_next_parser_step(self):
+    def test_when_shifting_analyzer_expect_valid_next_parser_step(self):
         # given:
         action_table = ActionTable(StateFiniteAutomaton(self.grammar))
         analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
         # when:
-        next_parser_step = analyzer.shift().shift().parser_step
-        print(next_parser_step)
+        next_parser_step = analyzer.shift().parser_step
+
         # then:
-        self.assertEqual(1,1)
+        self.assertEqual(next_parser_step.current_state.items,
+                         [ParserItem.from_string('S -> a.A'),
+                          ParserItem.from_string('A -> .bA'),
+                          ParserItem.from_string('A -> .c')])
+
+    def test_when_reducing_analyzer_expect_valid_next_parser_step(self):
+        # given:
+        action_table = ActionTable(StateFiniteAutomaton(self.grammar))
+        analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        # when:
+        next_parser_step = analyzer.shift().shift().shift().shift().shift().reduce().reduce().parser_step
+        # then:
+        self.assertEqual(next_parser_step.current_state.items, [ParserItem.from_string('A -> bA.')])
 
 
 if __name__ == "__main__":
-    test = TestClosure()
+    test = TestAnalyzer()
 
     test.setUp()
-    test.test_is_generating_closure()
-    test.test_is_going_to()
-    test.test_state_machine()
+    test.test_when_generating_closure_expect_valid_items()
+    test.test_whne_is_going_to_next_state_expect_valid_next_state()
+    test.test_when_generating_state_finite_automaton_expect_valid_transitions()

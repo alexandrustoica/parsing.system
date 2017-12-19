@@ -31,5 +31,9 @@ class Analyzer:
     def shift(self):
         return Analyzer(self.__action_table, None, self.__parser_step.shift(self.next_state))
 
+    def reduce(self):
+        return Analyzer(self.__action_table, None,
+                        self.__parser_step.reduce(self.__parser_step.last_state_from_stack, self.__action_table))
+
     def next_action(self):
         return self.__action_table.get_action_for_state(self.next_state)
