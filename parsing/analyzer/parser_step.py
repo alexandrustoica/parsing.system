@@ -1,13 +1,12 @@
 from typing import List
 
-import copy
-
 from parsing.action.action_table import ActionTable
 from parsing.domain.symbol import Symbol
 from parsing.state.destination_state import DestinationState
 
 
 class ParserStep:
+
     def __init__(self, stack: List[DestinationState],
                  input_stream: List[Symbol],
                  output_stream: List[DestinationState]):
@@ -57,5 +56,8 @@ class ParserStep:
 
     def __repr__(self):
         return str(self)
+
+
+
 
 

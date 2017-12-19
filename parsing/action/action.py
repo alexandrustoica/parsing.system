@@ -31,6 +31,9 @@ class Action:
     def destinations(self) -> List[DestinationState]:
         return self._destination_states
 
+    def is_type(self, action_type: ActionType):
+        return self._action_type is action_type
+
     @property
     def get_state_based_on_symbol(self, symbol) -> State:
         return next(filter(lambda destination: destination.symbol == symbol, self.destinations), None)

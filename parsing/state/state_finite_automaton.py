@@ -33,7 +33,7 @@ class StateFiniteAutomaton:
                 transitions: List[StateTransition],
                 visited_states: List[State]):
         for symbol in (item.next for item in current_state.items if item.has_next):
-            next_state = current_state.go_to(symbol)
+            next_state = current_state.go_to(symbol).check_conflict()
             if next_state in visited_states:
                 transitions.append(StateTransition(current_state, next_state, symbol))
                 continue

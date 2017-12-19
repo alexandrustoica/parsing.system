@@ -2,10 +2,20 @@ from typing import List
 
 from parsing.action.action import Action
 from parsing.action.action_type import ActionType
+from parsing.analyzer.analyzer_conflict import AnalyzerConflict
 from parsing.domain.symbol import Symbol
 from parsing.state.destination_state import DestinationState
 from parsing.state.state import State
 from parsing.state.state_finite_automaton import StateFiniteAutomaton
+
+
+def validated_result(foo):
+    def wrapper(*args, **kwargs):
+        result = foo(*args, **kwargs)
+        if result is None:
+            raise AnalyzerConflict(args)
+        return result
+    return wrapper
 
 
 class ActionTable:
@@ -17,11 +27,13 @@ class ActionTable:
     def actions(self) -> List[Action]:
         return self.__actions
 
+    @validated_result
     def next_state(self, current_state: State, symbol: Symbol) -> DestinationState:
         return next(filter(lambda destination: destination.symbol == symbol,
                            next(filter(lambda action: action.source == current_state,
                                        self.actions), None).destinations), None)
 
+    @validated_result
     def get_action_for_state(self, state: State) -> Action:
         return next(filter(lambda action: action.source == state, self.actions), None)
 

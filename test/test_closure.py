@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from parsing.action.action_table import ActionTable
 from parsing.analyzer.analyzer import Analyzer
+from parsing.analyzer.analyzer_conflict import AnalyzerConflict
 from parsing.domain.context_free_grammar import ContextFreeGrammar
 from parsing.domain.non_terminal import NonTerminal
 from parsing.domain.rule import Rule
@@ -11,6 +12,7 @@ from parsing.parser.closure import Closure
 from parsing.parser.item import ParserItem
 from parsing.state.incompatible_state_to_rule import IncompatibleStateToRuleException
 from parsing.state.state import State
+from parsing.state.state_conflict import StateConflict
 from parsing.state.state_finite_automaton import StateFiniteAutomaton
 
 
@@ -107,7 +109,6 @@ class TestAnalyzer(TestCase):
         state_finite_automaton = StateFiniteAutomaton(self.grammar)
         # when:
         action_table = ActionTable(state_finite_automaton)
-        print(action_table)
         # then:
         self.assertTrue(len(action_table.actions), len(state_finite_automaton.states))
 
@@ -128,7 +129,7 @@ class TestAnalyzer(TestCase):
         action_table = ActionTable(StateFiniteAutomaton(self.grammar))
         analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
         # when:
-        action = analyzer.next_action()
+        action = analyzer.next_action
         # then:
         self.assertEqual(action.source, analyzer.next_state)
 
@@ -153,6 +154,55 @@ class TestAnalyzer(TestCase):
         next_parser_step = analyzer.shift().shift().shift().shift().shift().reduce().reduce().parser_step
         # then:
         self.assertEqual(next_parser_step.current_state.items, [ParserItem.from_string('A -> bA.')])
+
+    def test_when_analyzer_accepts_input_expect_is_accepted_equals_true(self):
+        # given:
+        action_table = ActionTable(StateFiniteAutomaton(self.grammar))
+        analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        # when:
+        actual = analyzer.shift().shift().shift().shift().shift().reduce().reduce().reduce().reduce().reduce().is_accepted
+        # then:
+        self.assertTrue(actual)
+
+    def test_when_given_correct_expression_expect_analyzer_returns_true(self):
+        # given:
+        action_table = ActionTable(StateFiniteAutomaton(self.grammar))
+        analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        # when:
+        actual = analyzer.analyze()
+        # then:
+        self.assertTrue(actual)
+
+    def test_when_given_wrong_expression_expect_analyzer_raises_exception(self):
+        # given:
+        action_table = ActionTable(StateFiniteAutomaton(self.grammar))
+        analyzer = Analyzer(action_table, Symbol.from_string("aabc"))
+        # when/then:
+        self.assertRaises(AnalyzerConflict, analyzer.analyze)
+
+    def test_when_state_in_reduce_reduce_conflict_expect_state_conflict(self):
+        # given:
+        data = {
+            'terminals': ['1', '2'],
+            'non-terminals': ['S', 'A', 'B'],
+            'rules': ['A -> 1', 'B -> 1', 'S -> A1', 'S -> B2'],
+            'start': 'S'
+        }
+        grammar = ContextFreeGrammar.from_dictionary(data)
+        # when/then:
+        self.assertRaises(StateConflict, StateFiniteAutomaton, grammar)
+
+    def test_when_state_in_shift_reduce_conflict_expect_state_conflict(self):
+        # given:
+        data = {
+            'terminals': ['1'],
+            'non-terminals': ['S'],
+            'rules': ['S -> 1', 'S -> 1S'],
+            'start': 'S'
+        }
+        grammar = ContextFreeGrammar.from_dictionary(data)
+        # when/then:
+        self.assertRaises(StateConflict, StateFiniteAutomaton, grammar)
 
 
 if __name__ == "__main__":
