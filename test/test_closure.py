@@ -189,26 +189,16 @@ class TestAnalyzer(TestCase):
                 "program -> block program",
                 "block -> statement",
                 "block -> declaration",
-                # "declarations -> ",
-                # "declarations -> declaration declarations",
-                # "declaration -> type identifier 5",
                 "declaration -> type identifier 4 expression 5",
-                # "statements -> ",
-                # "statements -> statement statements",
                 "statement -> assignment",
                 "statement -> control_statement",
                 "statement -> io_statement",
                 "assignment -> identifier 4 expression 5",
                 "io_statement -> 7 10 11 5",
-                # "io_statement -> 6 identifier 5",
                 "io_statement -> 6 10 27 constant 27 11 5",
                 "control_statement -> conditional_statement",
                 "control_statement -> loop_statement",
                 "conditional_statement -> 8 10 expression 11 12 program 13",
-                # "conditional_statement -> conditional_statement 12 9 8 10 condition 11 12 block 13 13",
-                # "conditional_statement -> conditional_statement 12 9 12 block 13 13",
-                # "condition -> expression",
-                # "condition -> expression relation expression",
                 "loop_statement -> 24 10 type identifier 26 range 11 12 program 13",
                 "range -> identifier",
                 "range -> 25 10 constant 26 constant 11",
@@ -244,6 +234,7 @@ class TestAnalyzer(TestCase):
         self.with_pif_test_language_grammar_expect_success('../pif_io.txt', grammar)
         self.with_pif_test_language_grammar_expect_success('../pif_for.txt', grammar)
         self.with_pif_test_language_grammar_expect_success('../pif_if.txt', grammar)
+        self.with_pif_test_language_grammar_expect_success('../pif_complex.txt', grammar)
 
     def with_pif_test_language_grammar_expect_success(self, pif_file, grammar):
         # given:
