@@ -242,6 +242,7 @@ class TestAnalyzer(TestCase):
         analyzer = FluxSemanticAnalyzer(internal_form, grammar)
         # when:
         actual = analyzer.analyze()
+        print(actual)
         # then:
         self.assertTrue(actual)
 
@@ -292,12 +293,3 @@ class TestAnalyzer(TestCase):
         grammar = ContextFreeGrammar.from_dictionary(data)
         # when/then:
         self.assertRaises(StateConflict, StateFiniteAutomaton, grammar)
-
-
-if __name__ == "__main__":
-    test = TestAnalyzer()
-
-    test.setUp()
-    test.test_when_generating_closure_expect_valid_items()
-    test.test_whne_is_going_to_next_state_expect_valid_next_state()
-    test.test_when_generating_state_finite_automaton_expect_valid_transitions()
