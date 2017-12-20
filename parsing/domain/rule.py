@@ -27,11 +27,12 @@ class Rule:
     @staticmethod
     def from_complex_string(string: str):
         result = string.split(' -> ')
-        return Rule(NonTerminal(result[0].replace(' ', '')), [Symbol(x) for x in Rule.__get_symbols_from_string(result)])
+        return Rule(NonTerminal(result[0].replace(' ', '')),
+                    [Symbol(x) for x in Rule.__get_symbols_from_string(result)])
 
     @staticmethod
     def __get_symbols_from_string(result):
-        return ['ε'] if not (len(result) > 1 and len(result[1].split(' ')) > 1) else result[1].split(' ')
+        return ['ε'] if not (len(result[1].split(' ')) > 1) else result[1].split(' ')
 
     @staticmethod
     def from_parser_item(parser_item):

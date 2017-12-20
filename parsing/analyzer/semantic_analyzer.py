@@ -7,13 +7,12 @@ from parsing.domain.symbol import Symbol
 from parsing.state.destination_state import DestinationState
 
 
-class Analyzer:
+class SemanticAnalyzer:
 
     def __init__(self, action_table: ActionTable, input_stream: List[Symbol], parser_step: ParserStep = None):
         self.__action_table = action_table
         self.__parser_step = parser_step if parser_step is not None \
             else self.__build_initial_parser_step(input_stream)
-        print(self.__parser_step)
 
     @property
     def action_table(self) -> ActionTable:
@@ -44,15 +43,14 @@ class Analyzer:
             self.__parser_step.last_state_from_stack).is_type(ActionType.REDUCE)
 
     def shift(self):
-        return Analyzer(self.__action_table, None, self.__parser_step.shift(self.next_state))
+        return SemanticAnalyzer(self.__action_table, None, self.__parser_step.shift(self.next_state))
 
     def reduce(self):
-        return Analyzer(self.__action_table, None,
-                        self.__parser_step.reduce(self.__parser_step.last_state_from_stack, self.__action_table))
+        return SemanticAnalyzer(self.__action_table, None,
+                                self.__parser_step.reduce(self.__parser_step.last_state_from_stack, self.__action_table))
 
     @property
     def next_state(self) -> DestinationState:
-        print(self.__parser_step.current_state, self.__parser_step.current_symbol)
         return self.__action_table.next_state(self.__parser_step.current_state, self.__parser_step.current_symbol)
 
     @property

@@ -1,7 +1,9 @@
 from unittest import TestCase
 
 from parsing.action.action_table import ActionTable
-from parsing.analyzer.analyzer import Analyzer
+from parsing.analyzer.flux_semantic_analyzer import FluxSemanticAnalyzer
+from parsing.analyzer.internal_form import InternalForm
+from parsing.analyzer.semantic_analyzer import SemanticAnalyzer
 from parsing.analyzer.analyzer_conflict import AnalyzerConflict
 from parsing.domain.context_free_grammar import ContextFreeGrammar
 from parsing.domain.non_terminal import NonTerminal
@@ -114,7 +116,7 @@ class TestAnalyzer(TestCase):
     def test_when_getting_next_state_from_parser_step_expect_next_state(self):
         # given:
         action_table = ActionTable(StateFiniteAutomaton(self.grammar))
-        analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        analyzer = SemanticAnalyzer(action_table, Symbol.from_string("abbbc"))
         # when:
         next_state = analyzer.next_state
         # then:
@@ -126,7 +128,7 @@ class TestAnalyzer(TestCase):
     def test_when_getting_action_for_next_state_expect_right_action(self):
         # given:
         action_table = ActionTable(StateFiniteAutomaton(self.grammar))
-        analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        analyzer = SemanticAnalyzer(action_table, Symbol.from_string("abbbc"))
         # when:
         action = analyzer.next_action
         # then:
@@ -135,7 +137,7 @@ class TestAnalyzer(TestCase):
     def test_when_shifting_analyzer_expect_valid_next_parser_step(self):
         # given:
         action_table = ActionTable(StateFiniteAutomaton(self.grammar))
-        analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        analyzer = SemanticAnalyzer(action_table, Symbol.from_string("abbbc"))
         # when:
         next_parser_step = analyzer.shift().parser_step
 
@@ -148,7 +150,7 @@ class TestAnalyzer(TestCase):
     def test_when_reducing_analyzer_expect_valid_next_parser_step(self):
         # given:
         action_table = ActionTable(StateFiniteAutomaton(self.grammar))
-        analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        analyzer = SemanticAnalyzer(action_table, Symbol.from_string("abbbc"))
         # when:
         next_parser_step = analyzer.shift().shift().shift().shift().shift().reduce().reduce().parser_step
         # then:
@@ -157,7 +159,7 @@ class TestAnalyzer(TestCase):
     def test_when_analyzer_accepts_input_expect_is_accepted_equals_true(self):
         # given:
         action_table = ActionTable(StateFiniteAutomaton(self.grammar))
-        analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        analyzer = SemanticAnalyzer(action_table, Symbol.from_string("abbbc"))
         # when:
         actual = analyzer.shift().shift().shift().shift().shift().reduce().reduce().reduce().reduce().reduce().is_accepted
         # then:
@@ -166,7 +168,7 @@ class TestAnalyzer(TestCase):
     def test_when_given_correct_expression_expect_analyzer_returns_true(self):
         # given:
         action_table = ActionTable(StateFiniteAutomaton(self.grammar))
-        analyzer = Analyzer(action_table, Symbol.from_string("abbbc"))
+        analyzer = SemanticAnalyzer(action_table, Symbol.from_string("abbbc"))
         # when:
         actual = analyzer.analyze()
         # print(actual)
@@ -175,20 +177,21 @@ class TestAnalyzer(TestCase):
 
     def test_when_complex_grammar_example_expect_analyzer_to_work(self):
         # given:
+        # TODO Improve && Solve program -> .ε
         data = {
             'terminals': ['program', 'block', 'declarations', 'statements', 'declaration', 'type', 'identifier',
                           'expression', 'constant', 'statement', 'assignment', 'control_statement', 'io_statement',
                           'conditional_statement', 'loop_statement', 'condition', 'relation', 'sign_atom',
                           'operation', 'atom', 'low_level_operation', 'high_level_operation', 'range'],
             'non-terminals': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16',
-                              '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28'],
+                              '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27'],
             'rules': [
                 "program -> block",
                 "block -> declarations",
-                "block -> statements"
-                "declarations -> declarations",
-                "declarations -> declaration",
-                # "declaration -> type identifier 4 expression 5",
+                "block -> statements",
+                "declarations -> ",
+                "declarations -> declaration declarations",
+                "declaration -> type identifier 4 expression 5",
                 "declaration -> type identifier 5",
                 "type -> 2",
                 "type -> 3",
@@ -236,18 +239,17 @@ class TestAnalyzer(TestCase):
             'start': 'program'
         }
         grammar = ContextFreeGrammar.from_complex_dictionary(data)
-        action_table = ActionTable(StateFiniteAutomaton(grammar))
-        analyzer = Analyzer(action_table, Symbol.from_complex_string("2 0 5"))
-        # [print(x) for x in StateFiniteAutomaton(grammar).transitions]
+        internal_form = InternalForm('../pif.txt')
+        analyzer = FluxSemanticAnalyzer(internal_form, grammar)
         # when:
         actual = analyzer.analyze()
         # then:
-        # self.assertTrue(actual)
+        self.assertTrue(actual)
 
     def test_when_given_wrong_expression_expect_analyzer_raises_exception(self):
         # given:
         action_table = ActionTable(StateFiniteAutomaton(self.grammar))
-        analyzer = Analyzer(action_table, Symbol.from_string("aabc"))
+        analyzer = SemanticAnalyzer(action_table, Symbol.from_string("aabc"))
         # when/then:
         self.assertRaises(AnalyzerConflict, analyzer.analyze)
 
@@ -274,8 +276,7 @@ class TestAnalyzer(TestCase):
         grammar = ContextFreeGrammar.from_complex_dictionary(data)
         # when/then:
         action_table = ActionTable(StateFiniteAutomaton(grammar))
-        [print(x) for x in StateFiniteAutomaton(grammar).transitions]
-        analyzer = Analyzer(action_table, Symbol.from_complex_string("1 1"))
+        analyzer = SemanticAnalyzer(action_table, Symbol.from_complex_string("1 1 1"))
         # when:
         actual = analyzer.analyze()
         # then:
