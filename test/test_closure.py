@@ -177,42 +177,41 @@ class TestAnalyzer(TestCase):
 
     def test_when_complex_grammar_example_expect_analyzer_to_work(self):
         # given:
-        # TODO Improve && Solve program -> .ε
         data = {
             'terminals': ['program', 'block', 'declarations', 'statements', 'declaration', 'type', 'identifier',
                           'expression', 'constant', 'statement', 'assignment', 'control_statement', 'io_statement',
-                          'conditional_statement', 'loop_statement', 'condition', 'relation', 'sign_atom',
+                          'conditional_statement', 'loop_statement', 'relation', 'sign_atom',
                           'operation', 'atom', 'low_level_operation', 'high_level_operation', 'range'],
             'non-terminals': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16',
                               '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27'],
             'rules': [
-                "program -> block",
-                "block -> declarations",
-                "block -> statements",
-                "declarations -> ",
-                "declarations -> declaration declarations",
+                "program -> ",
+                "program -> block program",
+                "block -> statement",
+                "block -> declaration",
+                # "declarations -> ",
+                # "declarations -> declaration declarations",
+                # "declaration -> type identifier 5",
                 "declaration -> type identifier 4 expression 5",
-                "declaration -> type identifier 5",
-                "type -> 2",
-                "type -> 3",
-                "identifier -> 0",
-                "constant -> 1",
-                "constant -> 27 1 27",
-                "statements -> ",
-                "statements -> statement statements",
+                # "statements -> ",
+                # "statements -> statement statements",
                 "statement -> assignment",
                 "statement -> control_statement",
                 "statement -> io_statement",
                 "assignment -> identifier 4 expression 5",
-                "io_statement -> 6 10 11 5",
-                "io_statement -> 7 10 identifier 11 5",
+                "io_statement -> 7 10 11 5",
+                # "io_statement -> 6 identifier 5",
+                "io_statement -> 6 10 27 constant 27 11 5",
                 "control_statement -> conditional_statement",
                 "control_statement -> loop_statement",
-                "conditional_statement -> 8 10 expression 11 12 block 13",
+                "conditional_statement -> 8 10 expression 11 12 program 13",
                 # "conditional_statement -> conditional_statement 12 9 8 10 condition 11 12 block 13 13",
                 # "conditional_statement -> conditional_statement 12 9 12 block 13 13",
                 # "condition -> expression",
                 # "condition -> expression relation expression",
+                "loop_statement -> 24 10 type identifier 26 range 11 12 program 13",
+                "range -> identifier",
+                "range -> 25 10 constant 26 constant 11",
                 "expression -> sign_atom",
                 "expression -> 10 expression 11",
                 "expression -> expression operation atom",
@@ -220,26 +219,35 @@ class TestAnalyzer(TestCase):
                 "sign_atom -> 15 atom",
                 "operation -> low_level_operation",
                 "operation -> high_level_operation",
+                "atom -> identifier",
+                "atom -> constant",
+                "type -> 2",
+                "type -> 3",
+                "identifier -> 0",
+                "constant -> 1",
+                "constant -> 27 1 27",
                 "low_level_operation -> 14",
                 "low_level_operation -> 15",
                 "high_level_operation -> 16",
                 "high_level_operation -> 17",
                 "high_level_operation -> relation",
-                "atom -> identifier",
-                "atom -> constant",
                 "relation -> 22",
                 "relation -> 23",
                 "relation -> 21",
                 "relation -> 20",
                 "relation -> 19",
-                "relation -> 18",
-                "loop_statement -> 24 10 type identifier 26 range 11 12 block 13",
-                "range -> identifier",
-                "range -> 25 10 constant 26 constant 11"],
+                "relation -> 18"],
             'start': 'program'
         }
         grammar = ContextFreeGrammar.from_complex_dictionary(data)
-        internal_form = InternalForm('../pif.txt')
+        self.with_pif_test_language_grammar_expect_success('../pif_declarations.txt', grammar)
+        self.with_pif_test_language_grammar_expect_success('../pif_io.txt', grammar)
+        self.with_pif_test_language_grammar_expect_success('../pif_for.txt', grammar)
+        self.with_pif_test_language_grammar_expect_success('../pif_if.txt', grammar)
+
+    def with_pif_test_language_grammar_expect_success(self, pif_file, grammar):
+        # given:
+        internal_form = InternalForm(pif_file)
         analyzer = FluxSemanticAnalyzer(internal_form, grammar)
         # when:
         actual = analyzer.analyze()
@@ -270,13 +278,13 @@ class TestAnalyzer(TestCase):
         data = {
             'terminals': ['1', '2'],
             'non-terminals': ['S'],
-            'rules': ['S -> ', 'S -> 1 S'],
+            'rules': ['S -> ', 'S -> 1 S', 'S -> 2 S'],
             'start': 'S'
         }
         grammar = ContextFreeGrammar.from_complex_dictionary(data)
         # when/then:
         action_table = ActionTable(StateFiniteAutomaton(grammar))
-        analyzer = SemanticAnalyzer(action_table, Symbol.from_complex_string("1 1 1"))
+        analyzer = SemanticAnalyzer(action_table, Symbol.from_complex_string("1 1 1 2"))
         # when:
         actual = analyzer.analyze()
         # then:

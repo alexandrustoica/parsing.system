@@ -25,4 +25,4 @@ class FluxSemanticAnalyzer:
 
     @staticmethod
     def __convert_internal_form_to_symbols(internal_form: InternalForm) -> List[Symbol]:
-        return [Symbol(item.key) for item in internal_form.atoms]
+        return [Symbol(key) for key in internal_form.atom_keys]

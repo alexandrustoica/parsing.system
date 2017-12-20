@@ -32,7 +32,7 @@ class Rule:
 
     @staticmethod
     def __get_symbols_from_string(result):
-        return ['ε'] if not (len(result[1].split(' ')) > 1) else result[1].split(' ')
+        return ['ε'] if result[1].split(' ') == [''] else result[1].split(' ')
 
     @staticmethod
     def from_parser_item(parser_item):

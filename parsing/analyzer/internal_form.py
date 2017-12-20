@@ -12,3 +12,9 @@ class InternalForm:
     @property
     def atoms(self) -> List[InternalFormAtom]:
         return self.__atoms
+
+    @property
+    def atom_keys(self) -> List[str]:
+        groups = zip(*[list(map(lambda x: x.key, self.__atoms))[index::2] for index in range(2)])
+        other = [('12', 'ε', '13') if x == ('12', '13') else x for x in groups]
+        return [key for group in list(map(lambda x: list(x), other)) for key in group]
