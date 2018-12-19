@@ -36,4 +36,5 @@ class Action:
 
     @property
     def get_state_based_on_symbol(self, symbol) -> State:
-        return next(filter(lambda destination: destination.symbol == symbol, self.destinations), None)
+        return next(filter(lambda destination: destination.symbol ==
+                                               symbol, self.destinations), None)
