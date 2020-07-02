@@ -1,9 +1,21 @@
 version: '3'
 
 services:
+
+  flux-test:
+    build:
+      context: .
+      dockerfile: Dockerfile-test
+    environment:
+      - PYTHONPATH="${PYTHONPATH}:/."
+    image: flux-test:new
+    command: python -m unittest /test/test_closure.py
+
   flux:
     build:
       context: .
       dockerfile: Dockerfile
-    image: flux:latest
+    environment:
+      - PYTHONPATH="${PYTHONPATH}:/."
+    image: flux:new
 

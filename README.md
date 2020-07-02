@@ -15,11 +15,16 @@ $ docker build -t flux:new .
 
 ##### With Docker-Compose
 ```
-$ docker-compose build
+$ docker-compose build flux
 ```
 
 #### Run
 ```
-$ docker run -v <absolute path to example.json>:/parsing/example.json -t flux python /parsing/main.py /parsing/example.json
+$ docker run -v <absolute path to example.json>:/parsing/example.json -t flux:new python /parsing/main.py /parsing/example.json
+```
+
+#### Run Tests
+```
+$ docker-compose build flux-test; docker-compose run flux-test
 ```
 

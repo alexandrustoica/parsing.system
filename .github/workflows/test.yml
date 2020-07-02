@@ -1,4 +1,4 @@
-name: Build 
+name: Tests
 
 on:
   push:
@@ -10,4 +10,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build
-      run: docker-compose build flux
+      run: docker-compose build flux-test; docker-compose run flux-test

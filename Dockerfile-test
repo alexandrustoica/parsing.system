@@ -1,0 +1,6 @@
+FROM python:alpine3.7
+COPY /test /test
+COPY /parsing /parsing
+COPY *.txt /
+WORKDIR /.
+ENV PYTHONPATH "${PYTHONPATH}:/."
