@@ -1,0 +1,6 @@
+{
+  "non_terminals": ["S", "A", "B"],
+  "alphabet": ["a", "b", "c"],
+  "rules": ["A -> a"],
+  "start": "S"
+}
